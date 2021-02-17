@@ -4,15 +4,12 @@ $fn=32;
 projection(cut = true) mowerPlate();
 
 module mowerPlate() {
-  plateThickness = 2.5;
-  plateLength = 228.5;
-  plateWidth = 105.5;
-  plateCornerRadius = 10;
-  tabWidth = 36;
-  tabDepth = 10;
-
   difference() {
-    plate(t=plateThickness,l=plateLength,w=plateWidth,cr=plateCornerRadius,tw=tabWidth,td=tabDepth);
+    plateLength = 228.5; 
+    plateWidth = 105.5; 
+    plateThickness = 2.5;
+  
+    plate(l=plateLength,w=plateWidth,t=plateThickness);
     roundHoleFlatSide(r=7.9, c=0.7, x=22.5, y=85); // 1
     roundHole(r=5, x=48.5, y=87); // 2
     rectangleHole(l=56.8, w=28.6, x=69.7, y=70); // 3
@@ -30,7 +27,11 @@ module mowerPlate() {
   }
 }
 
-module plate(t,l,w,cr,tw,td) {
+module plate(l,w,t) {
+  cr = 10;  //corner radius
+  tw = 36; //tab width
+  td = 10; //tab depth
+
   translate([0,cr,0]) cube([l,w-cr*2,t]);
   translate([cr,0,0]) cube([l-cr*2,w,t]);
   translate([cr,cr,0]) cylinder(r=cr,h=t);
