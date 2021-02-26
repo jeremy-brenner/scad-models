@@ -1,9 +1,9 @@
 
 hole=true;
 grid=false;
-piece=-1; // [-1:whole, 0:first, 1:second, 2:clamp, 3:debug]
+piece=-1; // [-1:whole, 0:first, 1:second, 2:clamp, 3:smallClamp]
 
-holeCount=3;
+holeCount=4;
 shelfBoards=2;
 frameDepth=30;
 debug=false;
@@ -29,13 +29,13 @@ module main(hole,grid,holeCount,shelfBoards,piece,frameDepth,debug) {
 
   frameColor="#000000";
   shelfColor="#fee1a7";
-  
-  if(piece==3) {
-    shelfHole(frameW,thickness,frameH,frameDepth,shelfW,boardT,shelfBoards);
-  }
 
   if(piece==2) {
-    clamp(holeR,frameDepth);
+    clamp(holeR,frameDepth,0);
+  }
+
+  if(piece==3) {
+    clamp(holeR,frameDepth,thickness);
   }
 
   if(piece<2) {
@@ -80,10 +80,10 @@ module frameScrewHole(thickness) {
   };
 }
 
-module clamp(holeR,frameDepth) {
-  intersection() {
+module clamp(holeR,frameDepth,yOffset) {
+   intersection() {
     hex(holeR-2,frameDepth+100);
-    translate([holeR/3,0,0]) cube([holeR,holeR,frameDepth+100]);
+    translate([holeR/3,yOffset,0]) cube([holeR,holeR,frameDepth+100]);
   }
 }
 
