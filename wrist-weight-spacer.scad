@@ -1,16 +1,18 @@
 width=10;
+length=14;
+radius=3;
 
-spacer(width);
+spacer(width,length,radius);
 
-module spacer(width) {
+module spacer(width,length,radius) {
   $fn=32;
   difference() {
     union() {
-      cylinder(r=3,h=width);
-      translate([0,14,0]) cylinder(r=3,h=width);
-      translate([-3,0,0]) cube([6,14,width]);
+      cylinder(r=radius,h=width);
+      translate([0,length,0]) cylinder(r=radius,h=width);
+      translate([-radius,0,0]) cube([radius*2,length,width]);
     }
-    translate([-1,0,-0.5]) cube([2,14,width+1]);
-    translate([-1,0,-0.5]) cube([10,2,width+1]);
+    translate([-1,0,-0.5]) cube([2,length,width+1]);
+    translate([-1,0,-0.5]) cube([radius*2,2,width+1]);
   }
 }
