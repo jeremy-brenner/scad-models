@@ -11,7 +11,7 @@ debug=false;
 main(hole,grid,holeCount,shelfBoards,piece,frameDepth,debug);
 
 module main(hole,grid,holeCount,shelfBoards,piece,frameDepth,debug) {
-  boardW=183;
+  boardW=184;
   boardT=19;
   boardL=700;
   shelfFudge=0.5;
