@@ -1,8 +1,7 @@
 
 outputSvg=true;
 
-
-$fn=32;
+$fn=64;
 
 if(outputSvg) {
   projection(cut = true) 
