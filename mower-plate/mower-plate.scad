@@ -1,15 +1,21 @@
 
+outputSvg=true;
+
+
 $fn=32;
 
-// projection(cut = true) 
-mowerPlate();
+if(outputSvg) {
+  projection(cut = true) 
+    mowerPlate();
+} else {
+  mowerPlate();
+}
 
 module mowerPlate() {
+  plateLength = 228.5; 
+  plateWidth = 109; 
+  plateThickness = 2.8;
   difference() {
-    plateLength = 228.5; 
-    plateWidth = 109; 
-    plateThickness = 2.8;
-  
     plate(l=plateLength,w=plateWidth,t=plateThickness);
     roundHoleFlatSide(r=7.9, c=0.7, x=22.5, y=85); // 1
     roundHole(r=5, x=48.5, y=87); // 2
