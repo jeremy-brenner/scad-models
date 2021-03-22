@@ -7,7 +7,7 @@ mowerPlate();
 module mowerPlate() {
   difference() {
     plateLength = 228.5; 
-    plateWidth = 105.5; 
+    plateWidth = 109; 
     plateThickness = 2.8;
   
     plate(l=plateLength,w=plateWidth,t=plateThickness);
