@@ -46,15 +46,15 @@ module tab(t) {
   tcr = 2; //tab corner radius;
   twr = 2; //tab wing radius;
   translate([0,-tw/2,0]) {
-  cube([td-tcr,tw,t]);
-  translate([td-tcr,tcr,0]) cylinder(r=tcr,h=t);
-  translate([td-tcr,tw-tcr,0]) cylinder(r=tcr,h=t);
-  translate([0,tcr,0]) cube([td,tw-tcr*2,t]);
-  translate([0,-twr,0]) difference() {
-    cube([twr,tw+twr*2,t]);
-    translate([twr,0,-1]) cylinder(r=twr,h=t+2);
-    translate([twr,tw+twr*2,-1]) cylinder(r=twr,h=t+2);
-  }
+    cube([td-tcr,tw,t]);
+    translate([td-tcr,tcr,0]) cylinder(r=tcr,h=t);
+    translate([td-tcr,tw-tcr,0]) cylinder(r=tcr,h=t);
+    translate([0,tcr,0]) cube([td,tw-tcr*2,t]);
+    translate([0,-twr,0]) difference() {
+      cube([twr,tw+twr*2,t]);
+      translate([twr,0,-1]) cylinder(r=twr,h=t+2);
+      translate([twr,tw+twr*2,-1]) cylinder(r=twr,h=t+2);
+    }
   }
 }
 
