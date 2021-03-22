@@ -30,10 +30,6 @@ module mowerPlate() {
 
 module plate(l,w,t) {
   cr = 10; //corner radius
-  tw = 36; //tab width
-  td = 7;  //tab depth
-  tcr = 2; //tab corner radius;
-  twr = 2; //tab wing radius;
 
   translate([0,cr,0]) cube([l,w-cr*2,t]);
   translate([cr,0,0]) cube([l-cr*2,w,t]);
@@ -41,14 +37,24 @@ module plate(l,w,t) {
   translate([cr,w-cr,0]) cylinder(r=cr,h=t);
   translate([l-cr,w-cr,0]) cylinder(r=cr,h=t);
   translate([l-cr,cr,0]) cylinder(r=cr,h=t);
-  translate([l,w/2-tw/2,0]) cube([td-tcr,tw,t]);
-  translate([l+td-tcr,w/2-tw/2+tcr,0]) cylinder(r=tcr,h=t);
-  translate([l+td-tcr,w/2+tw/2-tcr,0]) cylinder(r=tcr,h=t);
-  translate([l,w/2-tw/2+tcr,0]) cube([td,tw-tcr*2,t]);
-  translate([l,w/2-tw/2-twr,0]) difference() {
+  translate([l,w/2,0]) tab(t);
+}
+
+module tab(t) {
+  tw = 36; //tab width
+  td = 7;  //tab depth
+  tcr = 2; //tab corner radius;
+  twr = 2; //tab wing radius;
+  translate([0,-tw/2,0]) {
+  cube([td-tcr,tw,t]);
+  translate([td-tcr,tcr,0]) cylinder(r=tcr,h=t);
+  translate([td-tcr,tw-tcr,0]) cylinder(r=tcr,h=t);
+  translate([0,tcr,0]) cube([td,tw-tcr*2,t]);
+  translate([0,-twr,0]) difference() {
     cube([twr,tw+twr*2,t]);
     translate([twr,0,-1]) cylinder(r=twr,h=t+2);
     translate([twr,tw+twr*2,-1]) cylinder(r=twr,h=t+2);
+  }
   }
 }
 
