@@ -12,21 +12,21 @@ if(outputSvg) {
 
 module mowerPlate() {
   plateLength = 228.5; 
-  plateWidth = 109; 
+  plateWidth = 108;
   plateThickness = 2.8;
   difference() {
     plate(l=plateLength,w=plateWidth,t=plateThickness);
     roundHoleFlatSide(r=7.9, c=0.7, x=22.5, y=85); // 1
     roundHole(r=5, x=48.5, y=87); // 2
-    rectangleHole(l=56.8, w=28.6, x=69.7, y=70); // 3
-    roundHole(r=14.2, x=148.5, y=73); // 4
-    roundHole(r=26.1, x=195.5, y=70); // 5
+    rectangleHole(l=56.8, w=28.6, x=65.7, y=70); // 3
+    roundHole(r=14.2, x=148.5, y=75); // 4
+    roundHole(r=26.2, x=195.5, y=70); // 5
 
-    rectangleHole(l=24.4, w=37, x=10.1, y=9); // 3
-    rectangleHole(l=36.8, w=20.8, x=51.7, y=15); // 3
-    roundHole(r=6, x=148.5, y=25); // 9
-    roundHole(r=6, x=108.5, y=25); // 10
-    roundHole(r=9.5, x=178.5, y=20); // 11
+    rectangleHole(l=24.4, w=37, x=12.1, y=9); // 7
+    rectangleHole(l=36.8, w=20.8, x=51.7, y=15); // 8
+    roundHole(r=6, x=114.5, y=25); // 9
+    roundHole(r=6, x=148.5, y=25); // 10
+    roundHole(r=9.5, x=179.5, y=22); // 11
     roundHole(r=3.5, x=10, y=plateWidth/2); // 12
 
     weirdThing(x=25,y=50,a=-8); // 6, 13, 14
