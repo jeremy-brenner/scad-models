@@ -16,20 +16,20 @@ module mowerPlate() {
   plateThickness = 2.8;
   difference() {
     plate(l=plateLength,w=plateWidth,t=plateThickness);
-    roundHoleFlatSide(r=7.9, c=0.7, x=22.5, y=86.25); // 1
+    roundHoleFlatSide(r=7.9, c=0.7, x=22.5, y=87.25); // 1
     roundHole(r=5, x=48.5, y=88.25); // 2
     rectangleHole(l=56.8, w=28.6, x=65.7, y=71.25); // 3
     roundHole(r=14.2, x=148.5, y=76.25); // 4
     roundHole(r=26.2, x=195.5, y=71.25); // 5
 
-    rectangleHole(l=24.4, w=37, x=12.1, y=10.25); // 7
+    rectangleHole(l=24.4, w=37, x=14.1, y=10.25); // 7
     rectangleHole(l=36.8, w=20.8, x=51.7, y=16.25); // 8
-    roundHole(r=6, x=114.5, y=26.25); // 9
-    roundHole(r=6, x=148.5, y=26.25); // 10
-    roundHole(r=9.5, x=179.5, y=23.25); // 11
+    roundHole(r=6, x=118.5, y=24.25); // 9
+    roundHole(r=6, x=150.5, y=24.25); // 10
+    roundHole(r=9.5, x=183.5, y=23.25); // 11
     roundHole(r=3.5, x=10, y=plateWidth/2); // 12
 
-    weirdThing(x=25,y=51.25,a=-8); // 6, 13, 14
+    weirdThing(x=27,y=51.25,a=-9); // 6, 13, 14
   }
 }
 
@@ -73,7 +73,7 @@ module weirdThing(x,y,a) {
     fatWidth=13;
 
     smallHoleDist=46;
-    smallHoleX=26.8;
+    smallHoleX=25.8;
 
     //narrow bit - 6
     rectangleHole(l=narrowLength+0.5, w=narrowWidth, x=0, y=5.2+6+fatWidth/2-narrowWidth/2); // 6
