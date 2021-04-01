@@ -42,10 +42,11 @@ module plate(l,w,t) {
   translate([cr,w-cr,0]) cylinder(r=cr,h=t);
   translate([l-cr,w-cr,0]) cylinder(r=cr,h=t);
   translate([l-cr,cr,0]) cylinder(r=cr,h=t);
-  translate([l,w/2,0]) tab(t);
+  translate([l,w/2,0]) tab();
 }
 
-module tab(t) {
+module tab() {
+  t = 2.4;
   tw = 36; //tab width
   td = 7;  //tab depth
   tcr = 2; //tab corner radius;
