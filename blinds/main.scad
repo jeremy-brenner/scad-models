@@ -6,7 +6,15 @@ include <./gear_box.scad>;
 include <./gear_mounts.scad>;
 include <./box.scad>;
 
-assembled();
+//assembled();
+
+box();
+//intersection() {
+//  rotate([180,0,0]) translate([0,10,0]) boxLid();
+//  translate([40,-36,0]) cube([67,35,30]);
+//}
+//translate([43.5,-34,1.5]) motor();
+
 
 module assembled() {
   rotate([-65,0,0]) translate([0,0,-1.25]) blindGearAssembled();
@@ -14,7 +22,7 @@ module assembled() {
   color("green",0.6) gearBox();
   color("silver") translate([-8,11.5,16]) gearBoxClip();
   translate([54.5,-6.1,12.5]) color("blue",0.6) rotate([0,0,180]) box();
-    translate([54.5,-6.1,70]) color("red",0.6) rotate([0,0,180]) boxLid();
+    translate([54.5,-6.1,65]) color("red",0.6) rotate([0,0,180]) boxLid();
 
   translate([11,-30.1,14.5]) mirror([1,0,0]) motor();
 }

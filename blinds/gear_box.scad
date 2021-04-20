@@ -9,8 +9,8 @@ module gearBoxClipHalf() {
   difference() {
     union() {
       cube([16,1.5,5]);
-      snapClip(6);
-      translate([16,0,0]) mirror([1,0,0]) snapClip(6);
+      translate([1,0,-1]) mirror([0,1,0]) snapClip(6);
+      translate([15,0,-1]) mirror([1,0,0]) mirror([0,1,0]) snapClip(6);
     }
     rotate([25/2,0,0]) translate([-50,-50,-10]) cube([100,100,10]);
     rotate([25/2,0,0]) translate([-50,-50,4.5]) cube([100,100,10]);

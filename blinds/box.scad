@@ -22,6 +22,9 @@ module boxLid() mirror([0,0,1]) {
     cube([109,33,5.5]);
     translate([1,1,-0.5]) cube([107,31,11]);
   }
+  translate([1.5,22,4.5]) rotate([90,0,0]) cylinder(r=1,h=8);
+  translate([110.5,22,4.5]) rotate([90,0,0]) cylinder(r=1,h=8);
+
 }
 
 module boxWithMount() {
@@ -35,29 +38,33 @@ module boxWithMount() {
     translate([54.5,5,13]) rotate([90,0,0]) cylinder(r=5,h=10);
     translate([49.5,-1,13]) cube([10,10,15.5]);
     translate([-1,14,4]) cube([10,8,4]);
+    translate([-0.5,13.5,19.5]) cube([4,9,2]);
+    translate([110,13.5,19.5]) cube([4,9,2]);
   }
   translate([42.5,4,1.5]) motorMount();
 }
 
 module motorMount() color("orange") difference() {
   union() {
-    translate([0,0,0]) cube([1,20,6]);
+    cube([1,20,6]);
     
-    translate([64,0,0]) difference() {
+    translate([63,0,0]) difference() {
         cube([1,20,6]);
         translate([-0.5,11,11]) rotate([0,90,0]) cylinder(r=8,h=2);
     }
 
-    translate([0,20,0]) cube([65,1,6]);
-    translate([0,0,0]) cube([65,1,6]);
+    translate([0,20,0]) cube([64,1,6]);
+    translate([0,0,0]) cube([64,1,6]);
 
-    translate([38.5,0,0]) difference() {
-      cube([26.5,20,6]);
+    translate([37.75,0,0]) difference() {
+      cube([25.5,20,6]);
       translate([-0.5,11,11]) rotate([0,90,0]) {
-        cylinder(r=11.5,h=12.5);
-        translate([0,0,12]) cylinder(r=10,h=15.5);
+        cylinder(r=11.5,h=12);
+        translate([0,0,11]) cylinder(r=10,h=15.5);
       }
     }
   } 
-  translate([60.5,15,6]) rotate([-90,0,0]) cylinder(r=2.5,h=10);
+  translate([59.5,15,6]) rotate([-90,0,0]) cylinder(r=2.5,h=10);
 }
+
+
