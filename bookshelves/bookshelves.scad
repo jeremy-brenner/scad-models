@@ -1,19 +1,23 @@
 
 hole=true;
 grid=false;
-piece=-1; // [-1:whole, 0:first, 1:second, 2:clamp, 3:smallClamp]
+piece=-1; // [-1:whole, 0:first, 1:second, 2:shelfHole, 3: mock]
 
 holeCount=4;
 shelfBoards=2;
 frameDepth=30;
+
+frameColor="#000000";
+shelfColor="#edc65a";
+
 debug=false;
 
 main(hole,grid,holeCount,shelfBoards,piece,frameDepth,debug);
 
 module main(hole,grid,holeCount,shelfBoards,piece,frameDepth,debug) {
-  boardW=184;
+  boardW=185;
   boardT=19;
-  boardL=700;
+  boardL=609;
   shelfFudge=0.5;
 
   shelfW = boardW*shelfBoards;
@@ -25,40 +29,53 @@ module main(hole,grid,holeCount,shelfBoards,piece,frameDepth,debug) {
   gridW = gridW(supportW(shelfW,thickness,shelfFudge),frameH,holeCount,thickness);
   holeR = holeR(frameH,holeCount,thickness);
     
-  frameW=supportW(shelfW,thickness,shelfFudge)+20;
-
-  frameColor="#000000";
-  shelfColor="#fee1a7";
-
-  if(piece==2) {
-    clamp(holeR,frameDepth,0);
-  }
-
-  if(piece==3) {
-    clamp(holeR,frameDepth,thickness);
-  }
+  frameW=supportW(shelfW,thickness,shelfFudge)+16;
 
   if(piece<2) {
     difference() {
-      color(frameColor) {
-        frame(frameW,frameH,frameDepth,thickness,holeCount,shelfW);
-        if(hole) {
-          shelfthicknessupport(frameW,thickness,frameH,frameDepth,shelfW,boardT,shelfFudge);
-        }
-      }  
-      if(hole) {
-        shelfHole(frameW,thickness,frameH,frameDepth,shelfW,boardT,shelfBoards,shelfFudge);
-      }
-    
+      finishedFrame(frameW,frameH,frameDepth,thickness,holeCount,shelfW,boardT,shelfBoards,shelfFudge,hole);
+
       if(piece > -1) {
         color("red") nukaGrid(frameDepth,frameW,frameH,holeCount,thickness,hole,piece);
       }
-      color("red") frameScrews(frameW,frameDepth,frameH,thickness);
     }
-    
-    if(grid) {     
-      hexGrid(frameDepth,frameW,frameH,holeCount,thickness);
+  }
+
+  if(piece==3) rotate([90,0,0]) {
+    doubleShelfRow(frameW,frameH,frameDepth,thickness,holeCount,shelfW,boardT,boardL,shelfBoards,shelfFudge);
+    translate([0,frameH,0]) singleShelfRow(frameW,frameH,frameDepth,thickness,holeCount,shelfW,boardT,boardL,shelfBoards,shelfFudge);
+    translate([0,frameH*2,0]) doubleShelfRow(frameW,frameH,frameDepth,thickness,holeCount,shelfW,boardT,boardL,shelfBoards,shelfFudge);
+    translate([0,frameH*3,0]) singleShelfRow(frameW,frameH,frameDepth,thickness,holeCount,shelfW,boardT,boardL,shelfBoards,shelfFudge);
+    translate([0,frameH*4,0]) doubleShelfRow(frameW,frameH,frameDepth,thickness,holeCount,shelfW,boardT,boardL,shelfBoards,shelfFudge);
+    translate([0,frameH*5,0]) singleShelfRow(frameW,frameH,frameDepth,thickness,holeCount,shelfW,boardT,boardL,shelfBoards,shelfFudge);
+    translate([0,frameH*6,0]) doubleShelfRow(frameW,frameH,frameDepth,thickness,holeCount,shelfW,boardT,boardL,shelfBoards,shelfFudge);
+  }
+
+  if(piece==2) {
+    difference() {
+      shelfthicknessupport(frameW,thickness,frameH,frameDepth,shelfW,boardT,shelfFudge);
+      shelfHole(frameW,thickness,frameH,frameDepth,shelfW,boardT,shelfBoards,shelfFudge);
+      translate([-1,0,-1]) cube([frameW/2+1,500,500]);
     }
+  }
+
+  if(grid) {     
+    hexGrid(frameDepth,frameW,frameH,holeCount,thickness);
+  }
+}
+
+module finishedFrame(frameW,frameH,frameDepth,thickness,holeCount,shelfW,boardT,shelfBoards,shelfFudge,hole) {
+  difference() {
+    color(frameColor) {
+      frame(frameW,frameH,frameDepth,thickness,holeCount,shelfW);
+      if(hole) {
+        shelfthicknessupport(frameW,thickness,frameH,frameDepth,shelfW,boardT,shelfFudge);
+      }
+    }  
+    if(hole) {
+      shelfHole(frameW,thickness,frameH,frameDepth,shelfW,boardT,shelfBoards,shelfFudge);
+    }
+    color("red") frameScrews(frameW,frameDepth,frameH,thickness);
   }
 }
 
@@ -78,13 +95,6 @@ module frameScrewHole(thickness) {
     cylinder(r=1.75,h=thickness+2,$fn=32);
     cylinder(r=4,h=3,$fn=32);
   };
-}
-
-module clamp(holeR,frameDepth,yOffset) {
-   intersection() {
-    hex(holeR-2,frameDepth+100);
-    translate([holeR/3,yOffset,0]) cube([holeR,holeR,frameDepth+100]);
-  }
 }
 
 module shelfthicknessupport(frameW,thickness,frameH,frameD,shelfW,boardT,shelfFudge) {
@@ -172,13 +182,27 @@ module hex(holeR,frameD) {
   translate([0,0,-1]) cylinder(r=holeR,h=frameD+2,$fn=6);
 }
 
-module shelf() translate([(frameW-shelfW)/2,(frameH+boardT)/2,-4]) rotate([180,-90,0]) {
-  board();
-  translate([0,0,boardW]) board();
+module shelfMock(frameW,frameH,frameDepth,thickness,holeCount,shelfW,boardT,boardL,shelfBoards,shelfFudge) {  
+  finishedFrame(frameW,frameH,frameDepth,thickness,holeCount,shelfW,boardT,shelfBoards,shelfFudge,true);
+  color(shelfColor) translate([11.5,160.5,0]) cube([shelfW,boardT,boardL]);
+  translate([0,0,boardL-frameDepth]) finishedFrame(frameW,frameH,frameDepth,thickness,holeCount,shelfW,boardT,shelfBoards,shelfFudge,true);
 }
 
-module board() {
-  cube([boardL,boardT,boardW]);
+module doubleShelfRow(frameW,frameH,frameDepth,thickness,holeCount,shelfW,boardT,boardL,shelfBoards,shelfFudge) {
+  shelfMock(frameW,frameH,frameDepth,thickness,holeCount,shelfW,boardT,boardL,shelfBoards,shelfFudge);
+     
+ // color(shelfColor) translate([11.5,160.5,boardL-frameDepth]) cube([shelfW,boardT,boardL]);
+
+  translate([0,0,boardL*2-frameDepth*2]) shelfMock(frameW,frameH,frameDepth,thickness,holeCount,shelfW,boardT,boardL,shelfBoards,shelfFudge);
+}
+
+module singleShelfRow(frameW,frameH,frameDepth,thickness,holeCount,shelfW,boardT,boardL,shelfBoards,shelfFudge) {
+  finishedFrame(frameW,frameH,frameDepth,thickness,holeCount,shelfW,boardT,shelfBoards,shelfFudge,false);
+  //  color(shelfColor) translate([11.5,160.5,0]) cube([shelfW,boardT,boardL]);
+  //  color(shelfColor) translate([11.5,160.5,boardL*2-frameDepth*2]) cube([shelfW,boardT,boardL]);
+
+  translate([0,0,boardL-frameDepth]) shelfMock(frameW,frameH,frameDepth,thickness,holeCount,shelfW,boardT,boardL,shelfBoards,shelfFudge);
+  translate([0,0,boardL*3-frameDepth*3]) finishedFrame(frameW,frameH,frameDepth,thickness,holeCount,shelfW,boardT,shelfBoards,shelfFudge,false);
 }
 
 function holeR(frameH,holeCount,thickness) = (frameH/holeCount-thickness)/sqrt(3);
