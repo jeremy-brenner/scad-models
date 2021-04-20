@@ -1,7 +1,7 @@
 
 outputSvg=true;
 
-$fn=64;
+$fn = $preview ? 16 : 64;
 
 if(outputSvg) {
   projection(cut = true) 
@@ -17,19 +17,19 @@ module mowerPlate() {
   difference() {
     plate(l=plateLength,w=plateWidth,t=plateThickness);
     roundHoleFlatSide(r=7.9, c=0.7, x=22.5, y=87.25); // 1
-    roundHole(r=5, x=48.5, y=88.25); // 2
-    rectangleHole(l=56.8, w=28.6, x=65.7, y=71.25); // 3
-    roundHole(r=14.2, x=148.5, y=76.25); // 4
+    roundHole(r=5, x=77.08, y=88.25); // 2
+    rectangleHole(l=57, w=28.6, x=103.79, y=71.25); // 3
+    roundHole(r=14.4, x=148.5, y=44.25); // 4
     roundHole(r=26.2, x=195.5, y=71.25); // 5
 
-    rectangleHole(l=24.4, w=37, x=14.1, y=10.25); // 7
-    rectangleHole(l=36.8, w=20.8, x=51.7, y=16.25); // 8
-    roundHole(r=6, x=118.5, y=24.25); // 9
-    roundHole(r=6, x=150.5, y=24.25); // 10
-    roundHole(r=9.5, x=183.5, y=23.25); // 11
+    rectangleHole(l=24.4, w=37.2, x=20.45, y=10.25); // 7
+    rectangleHole(l=37.2, w=20.8, x=51.7, y=13.07); // 8
+    roundHole(r=6.2, x=150.25, y=18.05); // 9
+    roundHole(r=6.2, x=180.5, y=18.05); // 10
+    roundHole(r=9.8, x=205.72, y=29.6); // 11
     roundHole(r=3.5, x=10, y=plateWidth/2); // 12
 
-    weirdThing(x=27,y=51.25,a=-9); // 6, 13, 14
+    weirdThing(x=38,y=69,a=-33.5); // 6, 13, 14
   }
 }
 
