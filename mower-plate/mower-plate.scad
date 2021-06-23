@@ -19,7 +19,7 @@ module mowerPlate() {
     roundHoleFlatSide(r=7.9, c=0.7, x=22.5, y=87.25); // 1
     roundHole(r=5, x=77.08, y=88.25); // 2
     rectangleHole(l=57, w=28.6, x=103.79, y=71.25); // 3
-    roundHole(r=14.4, x=148.5, y=44.25); // 4
+    roundHole(r=14.4, x=156, y=47.8); // 4
     roundHole(r=26.2, x=195.5, y=71.25); // 5
 
     rectangleHole(l=24.4, w=37.2, x=20.45, y=10.25); // 7

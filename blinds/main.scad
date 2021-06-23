@@ -1,12 +1,12 @@
 $fn=32;
 
 
-include <./gear.scad>;
-include <./gear_box.scad>;
-include <./gear_mounts.scad>;
-include <./box.scad>;
+use <./gear.scad>;
+use <./gear_box.scad>;
+use <./gear_mounts.scad>;
+use <./box.scad>;
 
-//assembled();
+assembled();
 
 box();
 //intersection() {

@@ -1,6 +1,14 @@
 
+motor();
+$fn=32;
+
 module motor() {
-  cube([37,19,22]);
+  
+  difference() {
+    cube([37,19,22]);
+    translate([11,-10.5,11]) rotate([-90,0,0]) translate([0,0,-0.5]) cylinder(r=3.125,h=39);
+  }
+
   translate([-5,7.5,8.5]) difference() {
     cube([5,4,5]);
     translate([2.5,-0.5,2.5]) rotate([-90,0,0]) cylinder(r=1.5,h=5);
@@ -30,7 +38,7 @@ module motor() {
 
   }
 
-  color("white") translate([11,(19-38)/2,11]) rotate([-90,0,0]) {
+  color("white") translate([11, -10.5, 11]) rotate([-90,0,0]) {
     intersection() {
       difference() {
         cylinder(r=3,h=38);
@@ -38,6 +46,6 @@ module motor() {
       }
       translate([-2,-3,0]) cube([4,6,38]);
     }
-    translate([0,0,9]) cylinder(r=3,h=20);
+    translate([0,0,8]) cylinder(r=3,h=22);
   }
 }
