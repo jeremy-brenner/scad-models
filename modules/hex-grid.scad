@@ -23,11 +23,11 @@ module hexGrid(hexInradius,height,supportThickness,xLen,yLen,skipCells,cappedCel
         shouldCap = search([[ix,iy]], cappedCells)[0] >= 0;
         
         
-      //  color("black", shouldSkip ? 0.1 : 1) label(x,y,ix,iy,hexInradius);
+        //color("black", shouldSkip ? 0.1 : 1) label(x,y,ix,iy,hexInradius);
 
-    //    if(!shouldSkip) {
+        if(!shouldSkip) {
           color(color, shouldSkip ? 0.1 : 1) translate([x,y,0]) hex(hexInradius,supportThickness,height,shouldCap);
-      //  }
+        }
       }
     }
   }
@@ -42,7 +42,7 @@ module hex(hexInradius,supportThickness,height,shouldCap) {
 }
 
 module label(x,y,ix,iy,hexInradius) {
-  translate([x,y,0]) rotate([$vpr[0]-90,$vpr[2],$vpr[1]]) text(text = str("[",ix,",",iy,"]"), size = hexInradius/3, halign = "center", valign = "center");
+  translate([x,y,0]) rotate([$vpr[0],$vpr[2],$vpr[1]]) text(text = str("[",ix,",",iy,"]"), size = hexInradius/3, halign = "center", valign = "center");
 }
 
 function hexCircumradius(hexInradius) = hexInradius/sqrt(3)*2;
