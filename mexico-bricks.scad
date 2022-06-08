@@ -1,6 +1,6 @@
 
-bumpScale=0.85;
-bumpHeight=0.5;
+bumpScale=0.75;
+bumpHeight=1;
 brickHeight=6;
 mw=8;
 ew=5.5;
