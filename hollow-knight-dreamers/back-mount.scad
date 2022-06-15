@@ -16,21 +16,24 @@ a=20;
 angles=[a,0,-a];
 masks=["./Monomon_-_Mask_centered.stl", "./Lurien_-_Mask_centered.stl", "./Herrah_-_Mask_centered.stl"];
 
-
 postBaseR=6;
 
 holeFudge=0.2;
 nutR=3.2;
 screwR=1.75;
 
-color("blue") translate([0,-236,-2]) cube([10,150,2]);
-color("blue") translate([0,84,-2]) cube([10,80,2]);
-color("blue") translate([170,-70,-2]) cube([80,10,2]);
+powerPlitterBox_ix=21;
+powerPlitterBox_iy=21;
+powerPlitterBox_iz=15;
 
-translate([0,0,25]) color("white") masks();
+// color("blue") translate([0,-236,-2]) cube([10,150,2]);
+// color("blue") translate([0,84,-2]) cube([10,80,2]);
+// color("blue") translate([170,-70,-2]) cube([80,10,2]);
 
-translate([-250,-236,0]) canvas();
-translate([0,0,5]) color("gray") backMount();
+// translate([0,0,25]) color("white") masks();
+
+// translate([-250,-236,0]) canvas();
+// translate([0,0,5]) color("gray") backMount();
 // translate([0,0,15]) holes() connector();
 
 
@@ -49,8 +52,68 @@ translate([0,0,5]) color("gray") backMount();
 
 // translate([0,0,10]) mountHelper();
 
+//canvasBracket();
+//  powerSplitterBox();
+ color("green") translate([powerPlitterBox_ix+t*2,0,powerPlitterBox_iz+t*2]) rotate([0,180,0]) powerSplitterBoxLid();
 
+module powerSplitterBox() {
+  ix=powerPlitterBox_ix;
+  iy=powerPlitterBox_iy;
+  iz=powerPlitterBox_iz;
+  difference() {
+    cube([ix+t*2,iy+t*2,iz+t]);
+    translate([t,t,t]) cube([ix,iy,iz+1]);
+    translate([t+3,-1,t+4]) cube([10,10,20]);
+    translate([9.7,iy-3,t+10]) cube([5,7,12.2]);
+  }
+}
 
+module powerSplitterBoxLid() {
+  ix=powerPlitterBox_ix;
+  iy=powerPlitterBox_iy;
+  difference() {
+    union() {
+      cube([ix+t*2,iy+t*2,t]);
+      translate([ix-10+t-3,0,t]) cube([10,t,5]);
+      translate([t,t,t]) difference() {
+          cube([ix,iy,10]);
+          translate([t,t,-0.1]) cube([ix-t*2,iy-t*2,10.2]);
+          translate([8,-1,0]) cube([10,5,20]);
+      }
+    }
+    translate([9.5,iy-3,-0.1]) cube([5,7,12.2]);
+  }
+}
+
+module canvasBracket() {
+  difference() {
+    union() {
+      cube([90,40,t]);
+      translate([0,7,0]) bracketBracket();
+      translate([0,33-t,0]) bracketBracket();
+      translate([-t,-5,0]) cube([t,50,10]);
+      translate([-t,-5,5]) rotate([0,90,0]) cylinder(r=5,h=t+3);
+      translate([-t,45,5]) rotate([0,90,0]) cylinder(r=5,h=t+3);
+    }
+    translate([60,20,-0.1]) cylinder(r=5,h=t+0.2);
+    translate([60,15,-0.1]) cube([30.1,10,t+0.2]);
+    translate([30,20,-0.1]) cylinder(r=5,h=t+0.2);
+    translate([-0.1,15,-0.1]) cube([30.1,10,t+0.2]);
+
+    translate([-t-0.1,-5,5]) rotate([0,90,0]) cylinder(r=2,h=10);
+    translate([-t-0.1,45,5]) rotate([0,90,0]) cylinder(r=2,h=10);
+    translate([0,-5,5]) rotate([0,90,0]) cylinder(r1=2, r2=3.5, h=3.1);
+    translate([0,45,5]) rotate([0,90,0]) cylinder(r1=2, r2=3.5,h=3.1);
+  }
+}
+
+module bracketBracket() {
+  cube([30,t,5]);
+  translate([30,0,0]) rotate([-90,0,0]) difference() {
+    cylinder(r=5,h=t);
+    translate([-5,-0.1,-0.1]) cube([10,10,t+0.2]);
+  }
+}
 
 module glueCross() {
   difference() {
@@ -94,17 +157,28 @@ module mountHelper() {
 module postLight() {
   or=postBaseR+t; 
   ir=postBaseR; 
-  translate([0,0,46]) {
-    difference() {
-      cylinder(r=or,h=t*2);
-      translate([0,0,t]) cylinder(r=ir,h=t+0.1, $fn=4);
-      translate([0,0,-0.1]) cylinder(r=screwR,h=10);
+  translate([0,0,46]) difference() {
+      union() {
+      difference() {
+        cylinder(r=or,h=t*2);
+        translate([0,0,t]) cylinder(r=ir,h=t+0.1, $fn=4);
+        translate([0,0,-0.1]) cylinder(r=screwR,h=10);
+      }
+      translate([0,0,-18]) difference() {
+        cylinder(r=or,h=18);
+        translate([0,0,10]) cylinder(r=ir,h=40);
+        translate([0,0,-0.1]) cylinder(r=ir,h=10.2, $fn=4);
+      }
+      translate([0,0,t-11]) difference() {
+        union() {
+          translate([0,0,t]) cylinder(r=9+t,h=t);
+          translate([0,0,-t]) cylinder(r1=or, r2=9+t, h=t*2);
+        }
+        translate([0,0,t]) cylinder(r=9,h=t+0.1);
+        translate([0,0,-t-0.1]) cylinder(r=ir,h=10.2);
+      }
     }
-    translate([0,0,-18]) difference() {
-      cylinder(r=or,h=18);
-      translate([0,0,4.9]) cylinder(r=ir,h=40);
-      translate([0,0,-0.1]) cylinder(r=ir,h=5.2, $fn=4);
-    }
+    translate([-3,-2,-8]) cube([6,10,8]);
   }
 }
 
@@ -147,11 +221,11 @@ module lightHolder() {
 module post() {
   or=postBaseR-holeFudge;
   ir=postBaseR-t-holeFudge;
-  postH=43;
+  postH=48;
   translate([0,0,-10]) difference() {
     union() {
       cylinder(r=or,h=postH,$fn=4);
-      translate([0,0,10]) cylinder(r=or,h=postH-15);
+      translate([0,0,10]) cylinder(r=or,h=postH-20);
     }
     translate([0,0,-0.1]) cylinder(r=ir,h=postH+0.2,$fn=4);
   }
