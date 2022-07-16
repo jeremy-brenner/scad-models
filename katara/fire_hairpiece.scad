@@ -1,7 +1,10 @@
 $fn=32;
 // linear_extrude(height = 1.4) scale(0.1) import("fire_emblem.svg");
 
-mainCyl();
+difference() {
+  mainCyl();
+  translate([9.5,0,0]) hinge();
+}
 
 translate([9.5,0,0]) {
  intersection() {
