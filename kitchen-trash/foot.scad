@@ -2,10 +2,16 @@ $fn=64;
 
 rr=0.5;
 poleR=6.9;
+extra=1.6;
 
 top();
-poleFoot();
-// poleFoot(5);
+
+poleFoot(0,extra);
+translate([0,0,-(poleR+3)*2]) mirror([0,0,1]) poleFoot(0);
+
+// poleFoot(5,extra);
+// translate([0,0,-(poleR+3)*2]) mirror([0,0,1]) poleFoot(5);
+
 // normalFoot();
 
 module normalFoot() {
@@ -19,11 +25,11 @@ module normalFoot() {
   }
 }
 
-module poleFoot(offset=0) {
+module poleFoot(offset=0,extra=0) {
   ch=poleR+2.5;
-  translate([0,0,-ch]) difference() {
-    cylinder(r=11,h=ch);
-    translate([0,0,-0.1]) cylinder(r=6,h=ch+0.2);
+  translate([0,0,-ch-extra]) difference() {
+    cylinder(r=11,h=ch+extra);
+    translate([0,0,-0.1]) cylinder(r=6,h=ch+extra+0.2);
     rotate([0,90,0]) translate([0,offset,-500]) cylinder(r=poleR,h=1000);
   }
 }
