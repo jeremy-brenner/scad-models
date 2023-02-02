@@ -10,6 +10,14 @@ ducts=true;
 
 $fn=32;
 
+translate([300,300,1500]) rotate([0,0,15]) {
+  h=40;
+  r=400;
+  t=r*1.75;
+  cylinder(r=r,h=h, $fn=6);
+  translate([0,t,0]) cylinder(r=r,h=h, $fn=6);
+  rotate([0,0,-120]) translate([0,t,0]) cylinder(r=r,h=h, $fn=6);
+}
 
 if(desk) desk();
 if(computer) computer();
