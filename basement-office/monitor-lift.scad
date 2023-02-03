@@ -1,84 +1,75 @@
 use <./monitors.scad>
 
 
-//p = $t*2 < 1 ? $t*2 : 1-($t*2-1);
+
 $fn=32;
 
-p=0;
+p=0; // [0:0.1:1]
+//p = $t*2 < 1 ? $t*2 : 1-($t*2-1);
 
-lift(p);
-
-// cube([50,50,700]);
+lift(p) {
+  rotate([0,90,0]) scale([0.7,0.7,0.7]) translate([-80,0,-200]) omen();  
+}
+//translate([0,0,140]) rotate([0,90,0]) omen();
 
 function angleFor(a,l1,l2) = asin((sin(a)*l1)/l2); 
 
 module lift(p) {
   
-  zh=12.5;
-
-  lal=160;
+  lal=160*1;
   sal=lal*0.5;
   lhl=lal*0.5625;
   tal=lal*0.375;
-
+  ttl=lal/2;
 
   minSA=7;
-  maxSA=66;
+  maxSA=72;
   sa=(maxSA-minSA)*p+minSA;
 
   la=angleFor(sa,sal,lhl);
 
-  taMinA=angleFor(minSA,sal,lhl);
-  // saOpp = sin(sa)*sal;
-  // la=asin(saOpp/lhl);
-  
-  
+  minLA=angleFor(minSA,sal,lhl);
 
-  //taMinA=asin(sin(minA)*lal/tal);
-
-
-  // minLA=7;
-  // maxLA=55;
-  // la=(maxLA-minLA)*p+minLA;
-
-
-
-
-  translate([35,0,zh]) {
-    arm(sal,sa);
+  translate([22,0,0]) {
     da=cos(la)*lhl;
     db=cos(sa)*sal;
-    translate([da+db,0,0]) mirror([1,0,0]) arm(lal,la,lhl);
+    translate([13,0,0]) {
+      arm(sal,sa); 
+      translate([da+db,0,0]) mirror([1,0,0]) arm(lal,la,lhl);
+    }
 
-    arm(tal,0);
+    lx=cos(la)*lal;
+    lz=sin(la)*lal;
+
+    color("red") translate([0, 5, 0]) sphere(r=1);
+    translate([da+db-lx+13, 5, lz]) color("red") sphere(r=1);
+
+    mx=da+db-lx+13;
+    dd=sqrt( mx^2 + lz^2 );
+    ba=atan(lz/mx);
+    
+    d1 = ( dd^2 - tal^2 + ttl^2 ) / ( 2 * dd );
+    d2 = dd-d1;
+    
+    taaa=acos(d2/tal);
+    ttaa=acos(d1/ttl);
+
+    arm(tal,ba+taaa);
+
+    translate([mx-ttl, 5, lz]) {
+      topThing(ba-ttaa,ttl) children();
+    }
   }
-
-  // da=cos(la)*lhl;
-  // db=cos(sa)*sal;
-  // translate([35+da+db,0,zh]) 
-  //mirror([1,0,0]) 
-  
-
-//  translate([35+cos(la)*sal*2,5,zh]) mirror([1,0,0]) arm(lal,la);
-
-//  translate([35,0,zh]) cube([10,10,sin(sa)*lal]);
-  
-  // taMinA=asin(sin(minA)*lal/tal);
-  // taMaxA=70;
-  // ta=(taMaxA-taMinA)*p+taMinA;
-
-  // wal=140;
-
-  // newA = asin( (sin(sa)*lal - sin(ta)*tal)/wal );
-
-  // translate([12.5,0,zh]) {
-  //   arm(tal,180-ta);
-  //   translate([cos(ta)*-tal,0,sin(ta)*tal]) arm(140,newA);
-  // }
-
-  //translate([0,-75,0]) cube([430,150,50]);
-  // cube([])
 }
+
+module topThing(a,o) {
+  translate([o,0,0]) rotate([0,-a,0]) translate([-o,0,-6]) {
+      translate([0,0,6]) rotate([-90,0,0]) cylinder(r=6,h=24);
+      cube([250,24,12]);
+      children();
+    }
+}
+
 
 module arm(l,a,eh=0) {
   or=6;
