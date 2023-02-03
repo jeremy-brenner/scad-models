@@ -6,56 +6,42 @@ $fn=32;
 
 p=0; // [0:0.1:1]
 //p = $t*2 < 1 ? $t*2 : 1-($t*2-1);
+mScale=0.7;
 
-lift(p) {
-  rotate([0,90,0]) scale([0.7,0.7,0.7]) translate([-80,0,-200]) omen();  
+lal=160;
+sal=lal*0.5;
+lhl=lal*0.5625;
+tal=lal*0.375;
+ttl=lal/2;
+minSA=7;
+maxSA=72;
+sa=(maxSA-minSA)*p+minSA;
+la=angleFor(sa,sal,lhl);
+da=cos(la)*lhl;
+db=cos(sa)*sal;
+lx=cos(la)*lal;
+lz=sin(la)*lal;
+mx=da+db-lx+13;
+dd=sqrt(mx^2+lz^2);
+ba=atan(lz/mx);     
+d1=(dd^2-tal^2+ttl^2)/(2*dd);
+d2=dd-d1;
+taaa=acos(d2/tal);
+ttaa=acos(d1/ttl); 
+
+scale(1/mScale) lift() {
+  rotate([0,90,0]) scale(mScale) translate([-80,0,-200]) omen();  
 }
-//translate([0,0,140]) rotate([0,90,0]) omen();
 
-function angleFor(a,l1,l2) = asin((sin(a)*l1)/l2); 
-
-module lift(p) {
-  
-  lal=160*1;
-  sal=lal*0.5;
-  lhl=lal*0.5625;
-  tal=lal*0.375;
-  ttl=lal/2;
-
-  minSA=7;
-  maxSA=72;
-  sa=(maxSA-minSA)*p+minSA;
-
-  la=angleFor(sa,sal,lhl);
-
-  minLA=angleFor(minSA,sal,lhl);
-
+module lift() {
   translate([22,0,0]) {
-    da=cos(la)*lhl;
-    db=cos(sa)*sal;
     translate([13,0,0]) {
       arm(sal,sa); 
       translate([da+db,0,0]) mirror([1,0,0]) arm(lal,la,lhl);
     }
-
-    lx=cos(la)*lal;
-    lz=sin(la)*lal;
-
     color("red") translate([0, 5, 0]) sphere(r=1);
     translate([da+db-lx+13, 5, lz]) color("red") sphere(r=1);
-
-    mx=da+db-lx+13;
-    dd=sqrt( mx^2 + lz^2 );
-    ba=atan(lz/mx);
-    
-    d1 = ( dd^2 - tal^2 + ttl^2 ) / ( 2 * dd );
-    d2 = dd-d1;
-    
-    taaa=acos(d2/tal);
-    ttaa=acos(d1/ttl);
-
     arm(tal,ba+taaa);
-
     translate([mx-ttl, 5, lz]) {
       topThing(ba-ttaa,ttl) children();
     }
@@ -69,7 +55,6 @@ module topThing(a,o) {
       children();
     }
 }
-
 
 module arm(l,a,eh=0) {
   or=6;
@@ -91,3 +76,5 @@ module arm(l,a,eh=0) {
 module omen() {
   translate([0,0,300]) mirror([1,0,0]) rotate([0,0,90]) omenMonitor();
 }
+
+function angleFor(a,l1,l2) = asin((sin(a)*l1)/l2); 
