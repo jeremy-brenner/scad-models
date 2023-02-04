@@ -1,28 +1,44 @@
 use <../cpu-shelf/shelf.scad>
 use <./monitors.scad>
+use <./monitor-lift.scad>
 
 mat=true;
 desk=true;
-monitors=true;
+monitors=false;
+liftedMonitors=true;
 computer=true;
 rafters=true;
 ducts=true;
+animate=false;
+position=0; // [0:0.1:1]
 
+
+p = animate ? $t*2 < 1 ? $t*2 : 1-($t*2-1) : position;
+//p=0; // [0:0.1:1]
+// p = 
+// p=0.0;
+mScale=0.35;
+mOffset=250;
 
 $fn=32;
 
-translate([300,300,1500]) rotate([0,0,15]) {
-  h=40;
-  r=400;
-  t=r*1.75;
-  cylinder(r=r,h=h, $fn=6);
-  translate([0,t,0]) cylinder(r=r,h=h, $fn=6);
-  rotate([0,0,-120]) translate([0,t,0]) cylinder(r=r,h=h, $fn=6);
-}
+//translate([300,-500,0]) cube([200,350,1830]);
+
+
+// translate([400,400,1700]) rotate([0,0,15]) {
+//   h=40;
+//   r=380;
+//   //r=200;
+//   t=r*1.75;
+//   cylinder(r=r,h=h, $fn=6);
+//   translate([0,t,0]) cylinder(r=r,h=h, $fn=6);
+//   rotate([0,0,-120]) translate([0,t,0]) cylinder(r=r,h=h, $fn=6);
+// }
 
 if(desk) desk();
 if(computer) computer();
 if(monitors) monitors();
+if(liftedMonitors) liftedMonitors();
 if(ducts) ducts();
 if(mat) mat();
 if(rafters) rafters();
@@ -30,6 +46,16 @@ if(rafters) rafters();
 module rafters() {
   color("#c29432", 0.5) for ( i = [0 : 5] ){
     translate([1725-400*i,-400,2340]) cube([40,3000,230]);
+  }
+}
+
+module liftedMonitors() {
+  moveIn=300;
+  dellYOffset=670;
+  translate([moveIn,moveIn,2000]) mirror([0,0,1]) {
+    translate([200,200,0]) rotate([0,0,-135]) liftWithOmen(p,mScale,mOffset);
+    translate([0,dellYOffset,0]) rotate([0,0,180]) liftWithDell(p,mScale,mOffset);
+    rotate([0,0,90]) mirror([0,1,0]) translate([0,dellYOffset,0]) rotate([0,0,180]) liftWithDell(p,mScale,mOffset);
   }
 }
 
