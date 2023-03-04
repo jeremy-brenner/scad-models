@@ -1,6 +1,7 @@
 use <../cpu-shelf/shelf.scad>
 use <./monitors.scad>
 use <./monitor-lift.scad>
+use <../functions/easing.scad>
 
 mat=true;
 desk=true;
@@ -13,11 +14,11 @@ animate=false;
 position=0; // [0:0.1:1]
 
 
-p = animate ? $t*2 < 1 ? $t*2 : 1-($t*2-1) : position;
+p = animate ? ease_in_out_quint($t*2 < 1 ? $t*2 : 1-($t*2-1)) : position;
+// p = animate ? ease_in_out_quint($t) : position;
 //p=0; // [0:0.1:1]
 // p = 
 // p=0.0;
-mScale=0.35;
 mOffset=250;
 
 $fn=32;
@@ -50,12 +51,12 @@ module rafters() {
 }
 
 module liftedMonitors() {
-  moveIn=300;
-  dellYOffset=670;
+  moveIn=250;
+  dellYOffset=750;
   translate([moveIn,moveIn,2000]) mirror([0,0,1]) {
-    translate([200,200,0]) rotate([0,0,-135]) liftWithOmen(p,mScale,mOffset);
-    translate([0,dellYOffset,0]) rotate([0,0,180]) liftWithDell(p,mScale,mOffset);
-    rotate([0,0,90]) mirror([0,1,0]) translate([0,dellYOffset,0]) rotate([0,0,180]) liftWithDell(p,mScale,mOffset);
+    translate([200,200,0]) rotate([0,0,-135]) liftWithOmen(p,mOffset);
+    translate([0,dellYOffset,0]) rotate([0,0,180]) liftWithDell(p,mOffset);
+    rotate([0,0,90]) mirror([0,1,0]) translate([0,dellYOffset,0]) rotate([0,0,180]) liftWithDell(p,mOffset);
   }
 }
 
