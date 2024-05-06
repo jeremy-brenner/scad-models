@@ -18,10 +18,15 @@ $fn=128;
 
 // color("black")
 // scale(0.7) stone(7.5);
+
+stoneConnector();
+
+module stoneConnector() {
 scale(0.7) {
-  translate([0,0,3]) cylinder(r1=2.3, r2=1.5,h=1);
-  cylinder(r=2.3,h=3);
-  translate([0,0,-1]) cylinder(r2=2.3, r1=1.5,h=1);
+  translate([0,0,3]) cylinder(r1=2.4, r2=2,h=1);
+  cylinder(r=2.4,h=3);
+  translate([0,0,-1]) cylinder(r2=2.4, r1=2,h=1);
+}
 }
 // scale(0.7) halfStone();
 
