@@ -1,6 +1,6 @@
 /* [Reg] */
 
-nameI=0; // [0: DrShoggoth]
+nameI=0; // [0: DrShoggoth, 1:Jeremy, 2:Ben, 3:Jake, 4: Ronnie]
 
 part="preview"; // ["preview", "name", "base", "baseBase"]
 
@@ -22,6 +22,10 @@ baseBaseT=5;
 
 names = [  
   ["do", "c", "tor", " ", "shaw", "go", "th"],
+  ["jer", "em", "y", " ", "b", "re", "nner"],
+  ["be", "n", " ", "pa", "tter", "so", "n"],
+  ["ja", "ke", " ", "bi", "sho", "p"],
+  ["ro", "nnie", " ", "lee", " ", "co", "b"],
 ];
 
 

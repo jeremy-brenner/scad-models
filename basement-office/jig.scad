@@ -1,13 +1,42 @@
 $fn=32;
 poleR=7;
 postR=2.25;
+h=46;
 
-// intersection() {
-//   basePart(postR);
-//   translate([-16,-50,0]) cube([32,100,100]);
-// }
 
-postInsert(postR);
+jigPiece();
+armBit([131,217,265,40]);
+// armBit(55);
+//translate([0,40,0]) mirror([0,1,0]) jigPiece();
+
+function maximum(a, i = 0) = (i < len(a) - 1) ? max(a[i], maximum(a, i +1)) : a[i];
+
+module armBit(lengths) {
+  length=maximum(lengths);
+  offset=20;
+  translate([0,offset,0]) difference() {
+    union() {
+      translate([-poleR,0,0]) cube([poleR*2,length-offset,h/2]);
+      translate([0,length-offset,0]) cylinder(r=poleR,h=h/2);
+    }
+    translate([0,-0.1,h/2]) rotate([-90,0,0]) cylinder(r=poleR,h=length*2);
+    for(y=lengths) {
+      translate([0,y-offset,-0.1]) {
+        cylinder(r=2.2,h=h);
+        cylinder(r=4.2,h=3.2,$fn=6);
+      }
+    }
+  }
+}
+
+module jigPiece() {
+  intersection() {
+    basePart(poleR);
+    translate([-16,-50,0]) cube([32,100,100]);
+  }
+}
+
+// postInsert(postR);
 
 module postInsert(holeR) {
   h=46;
@@ -24,8 +53,7 @@ module postInsert(holeR) {
 
 module basePart(holeR) {
   difference() {
-    h=46;
-    cylinder(r=30,h=h);
+    cylinder(r=27,h=h);
    translate([0,50,h/2]) rotate([90,0,0]) cylinder(r=holeR,h=100);
     translate([0,0,-1]) cylinder(r=9.75,h=h+2);
     translate([0,0,-1]) difference() {

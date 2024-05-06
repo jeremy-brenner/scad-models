@@ -1,11 +1,11 @@
-use <./monitors.scad>
-
+use <./monitors.scad>;
+use <./monitor-lift-poles.scad>;
 include <../modules/hex-grid.scad>;
 
 
 $fn=32;
 
-p=0; // [0:0.1:1]
+p=0.61; // [0:0.1:1]
 //p = $t*2 < 1 ? $t*2 : 1-($t*2-1);
 
 longArmLength=444.5;
@@ -23,13 +23,16 @@ mOffset=250;
 bearingR=5.5;
 bearingT=4;
 rodR=2.1;
-poleR=7;
+
+
 armR=11;
 postR=19;
 postL=922;
 armD=33;
 thickness=20;
 lineW=2;
+poleD=-21;
+
 
 
 // lift(p);
@@ -42,9 +45,13 @@ lineW=2;
 
 // postDrillTemplate();
 
+
+// poles(poleD);
+
 // bottomThingA();
 
 // bottomThingB();
+// translate([armD/2,0,-17]) color("red") rotate([0,90,0]) cylinder(r=0.2,h=217);
 endStop();
 
 // board();
@@ -61,8 +68,6 @@ endStop();
 // spacer();
 // bearingSpacer();
 // rodSpacer();
-
-
 
 module rodSpacer() {
   difference() {
@@ -201,8 +206,7 @@ module pArms(sa,middleArmLength,da,db,la,longArmLength,longArmHoleDistance,ba,ta
 }
 
 module bottomThingA() {
-  echo("HOLE1", 175-armR*2);
-  echo("HOLE2", 175+armD+armR*2);
+
   // color("red") {
   //   translate([-armR*2,0,0]) cylinder(r=1,h=50);
   //   translate([armD+armR*2,0,0]) cylinder(r=1,h=50);
@@ -213,64 +217,20 @@ module bottomThingA() {
         cylinder(r=armR+2,h=postR*2);
         translate([armD,0,0]) cylinder(r=armR+2,h=postR*2);
       }
-      translate([-armR*2,-postR,-armR-2]) screwTab();
-      translate([armD,0,0]) mirror([1,0,0]) translate([-armR*2,-postR,-armR-2]) screwTab();
+      translate([-armR-2,-postR*2,-26]) cube([armD+(armR+2)*2,postR*2,26]);
     }
     rotate([90,0,0]) translate([0,0,-1]) {
       cylinder(r=rodR+0.25,h=postR*2+2);
       translate([armD,0,0]) cylinder(r=rodR+0.25,h=postR*2+2);
     }
-  }
-   
-}
-
-module nub() {
-  intersection() {
-    rotate([0,0,-30]) {
-      sphere(r=1);
-      rotate([0,90,0]) cylinder(r=1,h=2.2);
-    }
-    translate([-1,0,-1]) cube([3,2,2]);
-  }
-}
-
-module endStop() {
-  sw=6.75;
-  ww=1.6;
-  tw=sw+ww*2;
-  difference() {
-    cube([9,sw+ww*2,20]);
-    translate([2,ww,-0.1]) cube([10,sw,20.2]);
-    translate([-0.1,(tw-5)/2,0.5]) cube([2.2,5,3]);
-    translate([-0.1,(tw-5)/2,10-1]) cube([2.2,5,3]);
-    translate([-0.1,(tw-5)/2,20-3.5]) cube([2.2,5,3]);
-  }
-  translate([6,ww,5])  nub();
-  translate([6,ww,15]) nub();
-  translate([6,ww+sw,5]) mirror([0,1,0]) nub();
-  translate([6,ww+sw,15]) mirror([0,1,0]) nub();
-  dw=3;
-  translate([0,tw/2,6.25]) rotate([45,0,0]) translate([0,-dw/2,-dw/2]) cube([3.4,dw,dw]);
-  translate([0,tw/2,14.25]) rotate([45,0,0]) translate([0,-dw/2,-dw/2]) cube([3.4,dw,dw]);
-  
-  tl=13;
-  translate([-tl,0,20]) {
-    difference() {
-      translate([0,0,-2]) union() {
-        cube([tl+9,tw,4]);
-        translate([0,tw/2,0]) cylinder(r=tw/2,h=4);
-      }
-      translate([0,0,-3]) union() {
-        translate([0,1,0]) cube([tl+10,tw-2,3]);
-        translate([0,tw/2,0]) cylinder(r=tw/2-1,h=3);
-      }
-      hull() {
-        translate([0,tw/2,-0.1]) cylinder(r=1.7,h=2.2);
-        translate([tl-3,tw/2,-0.1]) cylinder(r=1.7,h=2.2);
-      }
+    translate([0,0,-6]) {
+      translate([armD/2,-100,0]) poleScrewHole();
+      translate([-50,-postR-poleD/2,0]) poles(poleD);
     }
   }
 }
+
+
 
 module bottomThingB() {
   minla=angleFor(minSA,middleArmLength,longArmHoleDistance);
@@ -285,57 +245,122 @@ module bottomThingB() {
   trackEnd=armD+minda+mindb;
   length=trackEnd-trackStart;
 
-  // width=postR-3.5;
   width=postR*2;
   tabW=width*0.36;
 
-  echo("HOLE3", 175+trackStart-armR*2 );
-  echo("HOLE4", 175+trackEnd+armR*2 );
-  // color("red") {
-  //   translate([trackStart-armR*2,0,0]) cylinder(r=1,h=50);
-  //   translate([trackEnd+armR*2,0,0]) cylinder(r=1,h=50);
-  // }
+    middleW=width-tabW*2;
+    middleL=length+armR*6;
+    middleZ=-armR;
+
+  // echo("HOLE3", 175+trackStart-armR*2 );
+  // echo("HOLE4", 175+trackEnd+armR*2 );
+  
+  thingLen=length+(armR+2)*2+20;
+
+  echo("BTBHD", thingLen/2-20);
 
   translate([trackStart,0,0]) {
     difference() {
       union() {
-        rotate([90,0,0]) hull() {
-          cylinder(r=armR+2,h=width);
-          translate([length,0,0]) cylinder(r=armR+2,h=width);
+        difference() {
+          union() {
+            rotate([90,0,0]) hull() {
+              cylinder(r=armR+2,h=width);
+              translate([length,0,0]) cylinder(r=armR+2,h=width);
+            }
+            translate([-armR-2-10,-postR*2,-26]) cube([thingLen,postR*2,18]);
+          }
+          rotate([90,0,0]) hull() translate([0,0,-1]) {
+            cylinder(r=rodR+0.25,h=width+2);
+            translate([length,0,0])  cylinder(r=rodR+0.25,h=width+2);
+          }
+
+          hull() {
+            translate([2,width/-2,-10]) cylinder(r=(width-tabW*2)/2,h=100);
+            translate([-30,width/-2,-10]) cylinder(r=(width-tabW*2)/2,h=100);
+          }
+          translate([length,0,0]) mirror([1,0,0]) hull() {
+            translate([2,width/-2,-10]) cylinder(r=(width-tabW*2)/2,h=100);
+            translate([-30,width/-2,-10]) cylinder(r=(width-tabW*2)/2,h=100);
+          }
         }
-        translate([-armR*2,tabW/-2,-armR-2]) screwTab(tabW);
-        translate([-armR*2,-width+tabW/2,-armR-2]) screwTab(tabW);
-        translate([length,0,0]) mirror([1,0,0]) { 
-          translate([-armR*2,tabW/-2,-armR-2]) screwTab(tabW);
-          translate([-armR*2,-width+tabW/2,-armR-2]) screwTab(tabW);
+        translate([-33,-tabW-middleW,middleZ]) difference() {
+          cube([middleL,middleW,6]);
+          translate([5,middleW/2,-0.1]) {
+            cylinder(r=3.2,h=3.1,$fn=6);
+            cylinder(r=1.7,h=10);
+          }
+          translate([middleL-5,middleW/2,-0.1]) {
+            cylinder(r=3.2,h=3.1,$fn=6);
+            cylinder(r=1.7,h=10);
+          }
         }
       }
-      rotate([90,0,0]) hull() translate([0,0,-1]) {
-        cylinder(r=rodR+0.25,h=width+2);
-        translate([length,0,0])  cylinder(r=rodR+0.25,h=width+2);
+
+      translate([-23,-width-0.1,-6]) {
+        translate([10,0,0]) poleScrewHole();
+        translate([thingLen-10,0,0]) poleScrewHole();
+        translate([thingLen/2-10,0,0]) poleScrewHole();
+        translate([thingLen/2+10,0,0]) poleScrewHole();
       }
-      hull() {
-        translate([0,width/-2,-50]) cylinder(r=(width-tabW*2)/2,h=100);
-        translate([-30,width/-2,-50]) cylinder(r=(width-tabW*2)/2,h=100);
+      translate([-50,-postR-poleD/2,-6]) poles(poleD);
+
+    }
+    translate([-24+thingLen/2,-width,-26]) cube([2,width,18]);
+  }
+}
+
+module testHole() {
+  translate([0,0,-7-4]) rotate([-90,0,0]) {
+    cylinder(r=5,h=200);
+  }
+}
+
+module nub() {
+  sphere(r=1);
+}
+
+
+module endStop() {
+  sw=6.75;
+  ww=1.6;
+  tw=sw+ww*2;
+  difference() {
+    union() {
+      difference() {
+        translate([2,0,0]) cube([7,sw+ww*2,20]);
+        translate([3.5,ww,-0.1]) cube([10,sw,20.2]);
+        translate([-0.1,(tw-5)/2,-0.1]) cube([35,5,20.2]);
+      //  translate([-0.1,(tw-5)/2,10-1]) cube([2.2,5,3]);
+      //  translate([-0.1,(tw-5)/2,20-3.5]) cube([2.2,5,3]);
       }
-      translate([length,0,0]) mirror([1,0,0]) hull() {
-        translate([0,width/-2,-50]) cylinder(r=(width-tabW*2)/2,h=100);
-        translate([-30,width/-2,-50]) cylinder(r=(width-tabW*2)/2,h=100);
+      translate([6,ww,5])  nub();
+      translate([6,ww,15]) nub();
+      translate([6,ww+sw,5]) mirror([0,1,0]) nub();
+      translate([6,ww+sw,15]) mirror([0,1,0]) nub();
+      // dw=2.5;
+      // translate([0,tw/2,6.25]) rotate([45,0,0]) translate([0,-dw/2,-dw/2]) cube([3.4,dw,dw]);
+      // translate([0,tw/2,14.25]) rotate([45,0,0]) translate([0,-dw/2,-dw/2]) cube([3.4,dw,dw]);
+      
+      tl=20;
+      translate([-tl,0,20]) {
+        difference() {
+          translate([0,0,-2]) union() {
+            cube([tl+9,tw,4]);
+            translate([0,tw/2,0]) cylinder(r=tw/2,h=4);
+          }
+          translate([0,0,-3]) union() {
+            translate([0,1,0]) cube([tl+10,tw-2,3]);
+            translate([0,tw/2,0]) cylinder(r=tw/2-1,h=3);
+          }
+          hull() {
+            translate([0,tw/2,-0.1]) cylinder(r=1.7,h=2.2);
+            translate([tl-3,tw/2,-0.1]) cylinder(r=1.7,h=2.2);
+          }
+        }
       }
     }
-    middleW=width-tabW*2;
-    middleL=length+armR*6;
-    translate([-33,-tabW-middleW,-armR-2]) difference() {
-      cube([middleL,middleW,6]);
-      translate([5,middleW/2,-0.1]) {
-        rotate([0,0,90]) cylinder(r=3.2,h=3.1,$fn=6);
-        cylinder(r=1.7,h=10);
-      }
-      translate([middleL-5,middleW/2,-0.1]) {
-        rotate([0,0,90]) cylinder(r=3.2,h=3.1,$fn=6);
-        cylinder(r=1.7,h=10);
-      }
-    }
+    translate([-2,tw/2-0.25,-1]) cube([100,0.5,100]);
   }
 }
 

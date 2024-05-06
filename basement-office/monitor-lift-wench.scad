@@ -1,95 +1,129 @@
-use <./monitor-lift-motor.scad>
+use <./monitor-lift-motor-60ktyz.scad>
 use <../modules/involute_gears.scad>
+use <./monitor-lift-poles.scad>;
 
 $fn=64;
 
-spoolR=37.5;
+// d = 1000
+
+
+// spoolR=37.5;
+// sideR=spoolR+15;
+//235.6194 per rot
+// 4.25 rots
+// 5rpm = 51s
+// 10rmp = 25s
+
+spoolR=23;
+sideR=spoolR+20;
+poleD=21;
+//144.5133 per rot
+// 6.9 rots
+// 5rmp = 1m 23s
+// 10rmp = 41s
+
+// spoolR=27
+//169.646 per rot
+// 5.9 rots
+// 10rpm = 35.4s
+
+//spoolR=32
+// 201.06 per rot
+// 5 rots
+// 10 rpm = 30s
+
+
 spoolW=25;
 
-centerPostR=10;
+centerPostR=7;
 
-sideR=spoolR+15;
 sideW=5;
 
 screwR=2;
-screwD=25;
+screwD=15;
 
-protrusionH=16;
-protrusionR=15;
+protrusionH=8.5;
+protrusionR=10;
 
 brakePos=-55;
 
 brakeW=72;
 brakeRodInset=10;
 
-// translate([0,0,-24]) rotate([0,0,90]) liftMotor();
+// translate([0,0,-31.5]) rotate([0,0,90]) centerPost();
 
+  // translate([0,-10,0]) rotate([0, -90,0]) centerPostTop();
+  // translate([0,10,0]) rotate([0,0,180]) rotate([0, 90,0]) centerPostBottom();
 
 // translate([0,0,-3]) {
   // centerPostTop();
-//   centerPostBottom();
+  //  centerPostBottom();
 // }
-// mirror([0,0,1]) spoolSide();
+// mirror([0,0,1]) translate([0,0,spoolW/2]) spoolSide();
 
-//translate([22.5,0,0]) cordPost();
-// cordPostArm();
+// translate([spoolR-8,0,0]) cordPost();
 // cordPostCap();
-// spoolCenter();
-// translate([0,0,spoolW]) spoolSide(true);
+//  translate([0,0,-spoolW/2]) spoolCenter();
+//  translate([0,0,spoolW/2]) spoolSide(true);
 
 // brakeGearPad(39);
 // brakeGearPad(31);
 // brakeGearPad(23);
 
-  // translate([brakePos,0,47]) {
-  //    brake(0);
-  //    brakeGearPad(24);
-  // }  
-  // mirror([0,1,0]) mirror([1,0,0]) translate([brakePos,0,47]) {
-    // brake(1);
-    // brakeGearPad(24);
-  // }
+  translate([brakePos,0,30.5]) {
+     brake(0);
+  // //    brakeGearPad(39);
+  }  
+  mirror([0,1,0]) mirror([1,0,0]) translate([brakePos,0,30.5]) {
+    brake(1);
+  // //   brakeGearPad(39);
+  }
 // translate([0,0,20]) brakeGear();
 
+// mountPoles();
 
-// translate([0,0,50]) bearingMount();
-translate([0,0,56]) bearingClamp();
-
-
-
-//bearing
-// color("blue") translate([0,0,6]) cylinder(r=11, h=8);
-
-// bearing();
+// translate([0,0,35]) bearingMount();
+// translate([0,0,38]) bearingClamp();
 
 
-//  translate([0,0,-45.5]) motorMount();
+//  translate([0,0,-33]) rotate([0,0,45]) rotate([0,0,90]) liftMotor(-45);
+ 
+//  translate([0,0,-49]) motorMount();
 
 
-//cableRoller();
-//  rollerClamp();
+//  translate([56,0,0]) cableRoller();
+
+
+ 
+// translate([20,0,0]) rollerClampSide(true);
 
 // brakeBarBracket();
+
+
+module mountPoles() {
+  translate([63,200,0]) rotate([90,0,0]) rotate([0,-90,0])  translate([0,-poleD/2,0]) poles(poleD);
+}
+
 module brakeBarBracket() {
   //60
   difference() {
     union() {
-      translate([0,16,0]) rotate([0,90,0]) cylinder(r=3.5,h=2);
-      translate([0,-16,0]) rotate([0,90,0]) cylinder(r=3.5,h=2);
+      translate([0,16,3]) rotate([0,90,0]) cylinder(r=3.5,h=2);
+      translate([0,-16,3]) rotate([0,90,0]) cylinder(r=3.5,h=2);
       translate([0,16-3.5,0]) {
-        cube([2,7,10]);
+        translate([0,0,3]) cube([2,7,7]);
         translate([0,0,8]) cube([66,7,2]);
         translate([60,0,8]) cube([6,7,3.5]);
       }
       translate([0,-16-3.5,0]) {
-        cube([2,7,10]);
+        translate([0,0,3]) cube([2,7,7]);
         translate([0,0,8]) cube([66,7,2]);
         translate([60,0,8]) cube([6,7,3.5]);
       }
       
     }
-    translate([-0.1,16,0]) rotate([0,90,0]) cylinder(r=1.7,h=2.2);
-    translate([-0.1,-16,0]) rotate([0,90,0]) cylinder(r=1.7,h=2.2);
+    translate([-0.1,16,3]) rotate([0,90,0]) cylinder(r=1.7,h=2.2);
+    translate([-0.1,-16,3]) rotate([0,90,0]) cylinder(r=1.7,h=2.2);
   }
   translate([60,-brakeW/2,11.5]) difference() {
     cube([6,brakeW,7]);
@@ -99,49 +133,27 @@ module brakeBarBracket() {
 
 }
 
-module brakeMotorBracket() {
+module rollerClampSide() {
   difference() {
-    union() {
-      cube([18,2,50]);
-      cube([18,20,2]);
-      cube([1.5,4,50]);
-      cube([1.5,20,4]);
-
-      translate([16.5,0,0]) {
-        cube([1.5,4,50]);
-        cube([1.5,20,4]);
+    translate([0,0,7.7]) rotate([0,0,90]) rotate([0,90,0]) difference() {
+      union() {
+        hull() {
+          cylinder(r=7.7, h=8);
+          translate([0,-7.7,0]) cube([27.75,7.7*2,8]);
+          translate([2.75,5.5,31]) color("red") cube([25,2,1]);
+        } 
+        translate([9.75,-7.7,-17]) cube([18,7.7*2,21]);
       }
+      
+      translate([0,0,-0.1]) cylinder(r=5.6, h=5.1);
+      translate([0,0,-0.1]) cylinder(r=4, h=7.1);
     }
-    translate([18-5,7,-0.1]) cylinder(r=1.7,h=2.2);
-    translate([5,20-5,-0.1]) cylinder(r=1.7,h=2.2);
-
-    translate([5,0,24]) rotate([-90,0,0]) translate([0,0,-0.1]) cylinder(r=1.7,h=2.2);
-    translate([5,0,44]) rotate([-90,0,0]) translate([0,0,-0.1]) cylinder(r=1.7,h=2.2);
-    translate([13,0,24]) rotate([-90,0,0]) translate([0,0,-0.1]) cylinder(r=1.7,h=2.2);
-    translate([13,0,44]) rotate([-90,0,0]) translate([0,0,-0.1]) cylinder(r=1.7,h=2.2);
+    translate([-50,-17+poleD/2,0]) hull() mirror([0,1,0]) poles(0);
   }
+
 }
 
-module rollerClamp() {
-  difference() {
-    union() {
-      cylinder(r=7.7, h=7);
-      translate([6.7,12,2]) rotate([0,90,0]) cylinder(r=5,h=3);
-      translate([6.7,-12,2]) rotate([0,90,0]) cylinder(r=5,h=3);
 
-      translate([0,-7.7,0]) cube([7.7,7.7*2,7]);
-      translate([7.7,(7.7*2+8)/-2,0]) cube([2,7.7*2+8,7]);
-    }
-    translate([0,0,-0.1]) cylinder(r=5.6, h=4.1);
-    translate([0,0,-0.1]) cylinder(r=4, h=6.1);
-        
-    rotate([0,90,0]) translate([-2,12,-0.1]) cylinder(r=2.2, h=50);
-    rotate([0,90,0]) translate([-2,-12,-0.1]) cylinder(r=2.2, h=50);
-
-
-  }
-}
-  
 
 module bearing() {
   color("silver") translate([0,0,6]) difference() {
@@ -158,7 +170,7 @@ module bearingClamp() {
           cylinder(r=13.2, h=10);
           translate([-9,-16,0]) {
             translate([0,0,4]) rotate([0,90,0]) cylinder(r=4,h=2);
-            translate([0,32,4]) rotate([0,90,0]) cylinder(r=4,h=2);
+           translate([0,32,4]) rotate([0,90,0]) cylinder(r=4,h=2);
             cube([2,32,8]);
           }
         }
@@ -168,10 +180,11 @@ module bearingClamp() {
         translate([-50,-16,4]) rotate([0,90,0]) cylinder(r=1.7,h=100.2);
       }
     }
-    translate([0,0,12]) {
-      translate([-5,-9.5/2,0]) cube([5,9.5,2]);
-      translate([-7,-9.5/2,-2]) cube([2,9.5,4]);
-      translate([0,0,0]) cylinder(r=9.5/2,h=2);
+    translate([0,0,11]) {
+      cw=12;
+      translate([-5,-cw/2,0]) cube([5,cw,2]);
+      translate([-7,-cw/2,-2]) cube([2,cw,4]);
+      translate([0,0,0]) cylinder(r=cw/2,h=2);
     }
 }
 
@@ -190,69 +203,137 @@ module cableRoller() {
 
 module bearingMount() {
   dist=25.5;
-  translate([0,dist,0]) mountPost(false);
-  mirror([0,1,0]) translate([0,dist,0]) mountPost(false);
-  translate([65,-60,0]) difference() {
-    union() {
-      cube([10,120,20]);
-      translate([0,60-brakeW/2-2,-8.5]) cube([10,brakeW+4,8.5]);
-    }
-    translate([-0.1,8,10]) rotate([0,90,0]) cylinder(r=2.2,h=10.2);
-    translate([-0.1,112,10]) rotate([0,90,0]) cylinder(r=2.2,h=10.2);
-    translate([-1,60-brakeW/2+brakeRodInset,-4.75]) rotate([0,90,0]) cylinder(r=2.2,h=100);
-    translate([-1,60+brakeW/2-brakeRodInset,-4.75]) rotate([0,90,0]) cylinder(r=2.2,h=100);
-  }
   difference() {
-    translate([-5,-dist,0]) cube([18,dist*2,20]);
+    union() {
+      translate([0,dist,0]) mountPost(14);
+      mirror([0,1,0]) translate([0,dist,0]) mountPost(14);
+      translate([65,-60,0]) difference() {
+        translate([0,brakeW/3-2,-35]) cube([18,brakeW+2,49]);
+        translate([-1,60-brakeW/2+brakeRodInset,-5]) rotate([0,90,0]) cylinder(r=2.2,h=11);
+        translate([-1,60+brakeW/2-brakeRodInset,-5]) rotate([0,90,0]) cylinder(r=2.2,h=11);
+      }
+      difference() {
+        translate([-5,-dist,0]) cube([18,dist*2,14]);
 
-    translate([-5.1,16,10]) rotate([0,90,0]) {
-      cylinder(r=1.7,h=100.2);
-      translate([0,0,15.2]) cylinder(r=3.2,h=3,$fn=6);
+        translate([-5.1,16,7]) rotate([0,90,0]) {
+          cylinder(r=1.7,h=100.2);
+          translate([0,0,15.2]) cylinder(r=3.2,h=3,$fn=6);
+        }
+        translate([-5.1,-16,7]) rotate([0,90,0]) {
+          cylinder(r=1.7,h=100.2);
+          translate([0,0,15.2]) cylinder(r=3.2,h=3,$fn=6);
+        }
+
+        translate([0,0,3]) {
+          cylinder(r=11.2, h=8);
+          translate([-20,-11.2,0]) cube([20,22.4,8]);
+          translate([0,0,-50]) cylinder(r=5,h=100);
+          translate([-20,-5,-50]) cube([20,10,100]);
+        }
+      }
     }
-    translate([-5.1,-16,10]) rotate([0,90,0]) {
-      cylinder(r=1.7,h=100.2);
-      translate([0,0,15.2]) cylinder(r=3.2,h=3,$fn=6);
+    translate([60,36,-3]) rotate([0,90,0]) cylinder(r=3,h=30);
+
+    translate([0,0,-35]) mountPoles();
+    
+    translate([74,-20,15.1]) mirror([0,0,1]){
+      cylinder(r=6,h=25.2);
+      translate([0,11,22]) mirror([0,1,0]) rotate([90,0,0]) poleScrewHole();
     }
 
-    translate([0,0,6]) {
-      cylinder(r=11.2, h=8);
-      translate([-20,-11.2,0]) cube([20,22.4,8]);
-      translate([0,0,-50]) cylinder(r=5,h=100);
-      translate([-20,-5,-50]) cube([20,10,100]);
+    translate([74,20,15.1]) mirror([0,0,1]) {
+      cylinder(r=6,h=25.2);
+      translate([0,11,22]) mirror([0,1,0]) rotate([90,0,0]) poleScrewHole();
     }
+
   }
+
+
+  translate([83,41,12]) mirror([1,0,0]) rotate([90,0,0]) rotate([0,90,0]) difference() {
+      union() {
+        translate([-8, 0,10 ]) cube([26,2,44]);
+        translate([-8,-6,10]) cube([26,6,2]);
+        translate([16,-1,10]) cube([2,3,44]);
+        translate([8,-1,10]) cube([2,3,44]);
+        translate([0,-1,10]) cube([2,3,44]);
+        translate([-8,-6,52]) cube([26,6,2]);
+      }
+
+      translate([5,0,24]) rotate([-90,0,0]) translate([0,0,-0.1]) cylinder(r=1.7,h=8.2);
+      translate([5,0,44]) rotate([-90,0,0]) translate([0,0,-0.1]) cylinder(r=1.7,h=8.2);
+      translate([13,0,24]) rotate([-90,0,0]) translate([0,0,-0.1]) cylinder(r=1.7,h=8.2);
+      translate([13,0,44]) rotate([-90,0,0]) translate([0,0,-0.1]) cylinder(r=1.7,h=8.2);
+    }
+
+  translate([63,-45.5,-18]) rotate([0,0,-90]) rotate([90,0,0]) rollerClampSide();
 }
 
 module motorMount() {
-  dist=30.5;
-  translate([0,dist,0]) mountPost(true);
-  mirror([0,1,0]) translate([0,dist,0]) mountPost(true);
-  translate([65,-60,0]) difference() {
-    cube([10,120,20]);
-    translate([-0.1,8,10]) rotate([0,90,0]) cylinder(r=2.2,h=10.2);
-    translate([-0.1,112,10]) rotate([0,90,0]) cylinder(r=2.2,h=10.2);
+  dist=35.5;
+  
+  difference() {
+    union() {
+      translate([0,dist,0]) mountPost(14);
+      translate([dist,0,0]) mountPost(14);
+      mirror([0,1,0]) translate([0,dist,0]) mountPost(14);
+      translate([65,-60,0]) difference() {
+        union() {
+          translate([0,brakeW/3/2-0.5,0]) cube([18,brakeW*1.35,14]);
+          translate([0,brakeW/3-2,0]) cube([18,brakeW+2,49]);
+        }
+        translate([-1,60-brakeW/2+brakeRodInset,-4.75]) rotate([0,90,0]) cylinder(r=2.2,h=11);
+        translate([-1,60+brakeW/2-brakeRodInset,-4.75]) rotate([0,90,0]) cylinder(r=2.2,h=11);
+      }
+    }
+    translate([0,0,-1]) cylinder(r=30.5,h=100);
+    translate([0,0,-0.1]) rotate([0,0,45]) {
+      translate([50/2,50/2,0]) {
+        translate([0,0,-0.1]) cylinder(r=4.2,h=3.1,$fn=6);
+        translate([0,0,14-2.4]) cylinder(r=3.25,h=2.6);
+        cylinder(r=2.25,h=14.2);
+      }
+      translate([50/2,-50/2,0]) {
+        translate([0,0,-0.1]) cylinder(r=4.2,h=3.1,$fn=6);
+        translate([0,0,14-2.4]) cylinder(r=3.25,h=2.6);
+        cylinder(r=2.25,h=14.2);
+      }
+      translate([-50/2,-50/2,0]) {
+        translate([0,0,-0.1]) cylinder(r=4.2,h=3.1,$fn=6);
+        translate([0,0,14-2.4]) cylinder(r=3.25,h=2.6);
+        cylinder(r=2.25,h=14.2);
+      }
+    }
+    translate([83,-60,-1]) cube([50,120,22]);
+    translate([0,0,49]) mountPoles();
+    
+
+    translate([74,-20,-0.1]) {
+      cylinder(r=6,h=25.2);
+      translate([0,11,25]) mirror([0,1,0]) rotate([90,0,0]) poleScrewHole(true);
+    }
+
+    translate([74,20,-0.1]) {
+      cylinder(r=6,h=25.2);
+      translate([0,11,25]) mirror([0,1,0]) rotate([90,0,0]) poleScrewHole(true);
+    }
+        
+    
   }
+  
+  translate([63,-45.5,32]) 
+  mirror([0,0,1])
+  rotate([0,0,-90]) 
+  rotate([90,0,0]) rollerClampSide();
+
 }
 
-module mountPost(screwHoles=false) {
+module mountPost(mountPostT=20) {
   mountPostW=10;
-  mountPostT=20;
   difference() {
     union() {
       cylinder(r=mountPostW/2,h=mountPostT);
       rotate([0,0,-6.5]) translate([0,-mountPostW/2,0]) cube([70,mountPostW,mountPostT]); 
       rotate([0,0,6.5]) translate([0,-mountPostW/2,0]) cube([70,mountPostW,mountPostT]);
-    }
-    if(screwHoles) {
-      rotate([0,0,-6.5]) translate([13,-0.5,-1]) {
-        cylinder(r=1.75, h=100);
-        cylinder(r=3.2,h=3,$fn=6);
-      }
-      rotate([0,0,-6.5]) translate([19.5,-0.5,-1]) {
-        cylinder(r=1.75, h=100);
-        cylinder(r=3.2,h=3,$fn=6);
-      }
-      translate([13,-25-mountPostW/2,-1]) rotate([0,0,6.5]) cylinder(r=25,h=100);
     }
   }
 }
@@ -288,7 +369,7 @@ module cordPostCap() {
 
 module brakeGearPad(padW) {
   mirror([0,0,1]) difference() {
-    translate([0,-padW/2,4]) cube([25,padW,protrusionH-1]);
+    translate([0,-padW/2,4]) cube([25,padW,protrusionH]);
 
     translate([55,0,-5]) linear_extrude(45) offset(r=0.2) projection(cut=false) gear(
         number_of_teeth=70,
@@ -300,35 +381,35 @@ module brakeGearPad(padW) {
         rim_thickness=protrusionH+sideW,
         gear_thickness=3
       );
-    brakeGearPadHoles();
+    translate([0,0,-6]) brakeGearPadHoles();
 
   }
 }
 
+module springHook() {
+  translate([0,-brakeW/2-4,0.5]) {
+    translate([-1,0,0]) cube([3,4,2.5]);
+    translate([-3,0,0]) cube([4,2,2.5]);
+    translate([-3,2,0]) cube([1,1,2.5]);
+  }
+}
 
 module brake(side=0) {
-  brakeSideW=brakeW/2-16.5;  
+  brakeSideW=brakeW/2-18.5;  
   difference() {
     union() {
-      translate([0,-brakeW/2+2,-4]) cube([30,brakeW,7]);
-      translate([39.3,-brakeW/2+brakeSideW-0.6,-4]) rack(number_of_teeth=20, diametral_pitch=0.80, pressure_angle=25, rim_width=brakeSideW,rim_thickness=7);
+      translate([0,-brakeW/2,-4]) cube([30,brakeW,7]);
+      translate([39.3,-brakeW/2+brakeSideW-0.6+2,-4]) rack(number_of_teeth=20, diametral_pitch=0.80, pressure_angle=25, rim_width=brakeSideW,rim_thickness=7);
+      hookD=14;
       if(side==1) {
-        translate([45,-brakeW/2-19,0.5]) difference() {
-          cube([8,17,2.5]);
-          translate([4,4,-0.1]) cylinder(r=2.2,h=2.7);
+        translate([38,-brakeW/2-18,0.5]) difference() {
+          cube([7,19,2.5]);
+          translate([3.5,4,-0.1]) cylinder(r=2.2,h=2.7);
         }
-        translate([76.5-13.5,-brakeW/2-6,1]) {
-          translate([-1,0,0]) cube([3,4,2]);
-          translate([-3,0,0]) cube([4,2,2]);
-          translate([-3,2,0]) cube([1,1,2]);
-        }
+        translate([76.5-hookD,0,0]) springHook();
       }
       if(side==0) {
-        mirror([0,1,0]) translate([14.5,-brakeW/2-6,1]) {
-          translate([-1,0,0]) cube([3,4,2]);
-          translate([-3,0,0]) cube([4,2,2]);
-          translate([-3,2,0]) cube([1,1,2]);
-        }
+        mirror([0,1,0]) translate([28-hookD,0,0]) springHook();
       }
     }
     translate([-1,-brakeW/2+brakeRodInset,-0.5]) rotate([0,90,0]) cylinder(r=2.2,h=100);
@@ -364,30 +445,31 @@ module brakeGear() {
 }
 
 module spoolSide(teeth=false) {
+  extra = teeth ? 0 : 1.5;
   difference() {
     union() {
       cylinder(r1=sideR, r2=sideR+sideW,h=sideW);
-      cylinder(r=protrusionR,h=protrusionH+sideW);
-      if(teeth) gear(
+      cylinder(r=protrusionR,h=protrusionH+sideW+extra);
+      if(teeth) translate([0,0,sideW]) gear(
         number_of_teeth=70,
         circular_pitch=4,
         bore_diameter=2,
 				hub_diameter=4,
 				rim_width=8,
-				hub_thickness=4,
-				rim_thickness=protrusionH+sideW,
+				hub_thickness=0,
+				rim_thickness=protrusionH,
 				gear_thickness=3
       );
     }
-    translate([0,0,-0.1]) rotate([0,0,30]) cylinder(r=centerPostR+0.2,h=protrusionH+sideW+0.2,$fn=6);
-    translate([0,screwD,-0.1]) cylinder(r=screwR+0.2,h=protrusionH+sideW+0.2);
-    translate([0,-screwD,-0.1]) cylinder(r=screwR+0.2,h=protrusionH+sideW+0.2);
+    translate([0,0,-0.1]) rotate([0,0,30]) cylinder(r=centerPostR+0.2,h=protrusionH+sideW+extra+0.2,$fn=6);
+    translate([0,screwD,-0.1]) cylinder(r=screwR+0.2,h=protrusionH+sideW+extra+0.2);
+    translate([0,-screwD,-0.1]) cylinder(r=screwR+0.2,h=protrusionH+sideW+extra+0.2);
     if(!teeth) {
       translate([0,screwD,2]) cylinder(r=4+0.2,h=3.1, $fn=6);
       translate([0,-screwD,2]) cylinder(r=4+0.2,h=3.1, $fn=6);
-      translate([-protrusionR,0,protrusionH+sideW-8]) rotate([0,90,0]) {
+      translate([-protrusionR,0,(protrusionH+sideW+extra)-(protrusionH+extra)/2]) rotate([0,90,0]) {
         cylinder(r=1.7,h=protrusionR*2);
-        cylinder(r=3.2,h=3,$fn=6);
+        rotate([0,0,90]) cylinder(r=3.2,h=3,$fn=6);
       }
     }
   }
@@ -399,8 +481,8 @@ module spoolSide(teeth=false) {
 module spoolCenter() {
   difference()  {
     cylinder(r=spoolR,h=spoolW);
-    translate([spoolR-10,-2.5,-0.1]) cube([10,5,spoolW+0.2]);
-    translate([spoolR-15,0,-0.1]) cylinder(r=7.5,h=spoolW+0.2);
+    translate([spoolR-8,-2.5,-0.1]) cube([10,5,spoolW+0.2]);
+    translate([spoolR-8,0,-0.1]) cylinder(r=7.5,h=spoolW+0.2);
     translate([0,0,-0.1]) rotate([0,0,30]) cylinder(r=centerPostR+0.2,h=spoolW+0.2,$fn=6);
     translate([0,screwD,-0.1]) cylinder(r=screwR+0.2,h=spoolW+0.2);
     translate([0,-screwD,-0.1]) cylinder(r=screwR+0.2,h=spoolW+0.2);
@@ -408,12 +490,12 @@ module spoolCenter() {
 }
 
 module centerPost() {
-  h=55;
+  h=57.75;
   difference() {
     cylinder(r=centerPostR,h=h, $fn=6);
-    translate([0,0,-1]) intersection() {
-      cylinder(r=3.75,h=17);
-      translate([-50,-2.75,0]) cube([100,100,17]);
+    translate([0,0,-1]) difference() {
+      cylinder(r=3.75,h=19);
+      translate([-50,-3.75,4]) cube([100,0.75,15]);
     }
     translate([0,50,9]) rotate([90,0,0]) cylinder(r=1.75,h=100);
 

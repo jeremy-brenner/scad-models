@@ -1,0 +1,1 @@
+ projection(cut = false) rotate([-90,0,0]) import("Pendant with gem.stl");

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg5"
+   xml:space="preserve"
+   inkscape:export-filename="baseboard.svg"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="6.2003367"
+     inkscape:cx="163.37822"
+     inkscape:cy="1064.9422"
+     inkscape:window-width="1920"
+     inkscape:window-height="1043"
+     inkscape:window-x="0"
+     inkscape:window-y="348"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" /><defs
+     id="defs2" /><g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"><path
+       id="rect459"
+       style="fill:none;stroke:#001fff;stroke-width:0.2;stroke-dasharray:none;stroke-opacity:1"
+       d="m 25.609662,121.09969 c 0.973526,-3.9e-4 5.646592,-0.004 7.920316,0.0109 1.167975,1.52004 1.164945,1.79088 2.092202,3.21285 1.256449,2.51069 0.312282,3.94547 -0.611918,6.06285 -1.029366,2.35831 -2.281202,3.43955 1.355788,10.71543 2.354156,4.70954 6.300116,8.63516 6.683456,13.28615 0.194326,2.35771 -1.547353,7.6509 -4.418583,8.39373 1.723461,-0.005 2.042984,-0.005 2.697737,0.006 1.596027,0.0254 2.082672,1.26811 2.070488,2.91896 -0.01372,11.89635 0.0017,115.5186 0.0017,115.5186 l -17.744512,-0.006 c -0.06678,-53.35973 -0.05284,-159.29589 -0.04667,-160.11943 z"
+       sodipodi:nodetypes="cccssscscccc" /></g></svg>
