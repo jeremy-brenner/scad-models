@@ -1,9 +1,15 @@
 #include <FastLED.h>
+#include <ESP8266TrueRandom.h>
+
 #define NUM_LEDS 64
 #define DATA_PIN 2
+#define NUM_LIGHTS 9
+#define LEDS_PER_LIGHT 4
+#define ANIMATION_STEPS 10
+#define ANIMATION_TIME 300
+#define SLEEP_MAX_TIME 5000
 
-
-int lights[9][4] = { 
+int lights[NUM_LIGHTS][LEDS_PER_LIGHT] = { 
   { 0, 1, 14, 15 },
   { 3, 4, 11, 12 },
   { 6, 7, 8, 9 },
@@ -15,50 +21,68 @@ int lights[9][4] = {
   { 54, 55, 56, 57 }
 };
 
+CRGB leds[NUM_LEDS];
+
+CRGB onColor = CRGB::LimeGreen;
+CRGB offColor = CRGB::Black;
+
 long currentState = 0;
 long lastState = 0;
-
-CRGB leds[NUM_LEDS];
 
 void setup() { 
   Serial.begin(9600);
   randomSeed(analogRead(0));
-  FastLED.addLeds<WS2812, DATA_PIN>(leds, NUM_LEDS); 
+  FastLED.addLeds<WS2812, DATA_PIN, GRB>(leds, NUM_LEDS); 
 }
-
 
 void loop() {
   lastState = currentState;
-  currentState = random(512);
-  int steps = 10;
-  long animationTime = 200;
+  currentState = ESP8266TrueRandom.random(512);
   
-  for (int step = 1; step <= steps; step++) {
-    for (int x = 0; x < 9; x++) {
-      bool wasOn = ((lastState >> x) & 1) == 1;    
-      bool isOn = ((currentState >> x) & 1) == 1;    
-      for (int z = 0; z < 4; z++) {
-        if(isOn && wasOn) {
-          leds[lights[x][z]] = CRGB (250, 30, 30);
-          continue;
-        }
-        if(!isOn && !wasOn) {
-          leds[lights[x][z]] = CRGB::Black;
-          continue;
-        }
-        if(isOn) {
-          leds[lights[x][z]] = CRGB (250/steps*step, 30/steps*step, 30/steps*step);
-          continue;
-        }
-        if(!isOn) {
-          leds[lights[x][z]] = CRGB (250-250/steps*step, 30-30/steps*step, 30-30/steps*step);
-          continue;
-        }
-      }
+  for (int step = 1; step <= ANIMATION_STEPS; step++) {
+    for (int lightIdx = 0; lightIdx < NUM_LIGHTS; lightIdx++) {
+      CRGB color = getLightColor(lightIdx,step);
+      updateLight(lightIdx,color);
     }
     FastLED.show(); 
-    delay(animationTime/steps);
+    delay(ANIMATION_TIME/ANIMATION_STEPS);
   }
-  long sleepTime = random(4500);
+  long sleepTime = ESP8266TrueRandom.random(SLEEP_MAX_TIME);
   delay(sleepTime);
+}
+
+CRGB getLightColor(int lightIdx, int step) {
+  bool isOn = lightIsOn(lightIdx);
+  bool wasOn = lightWasOn(lightIdx);
+  if(isOn && wasOn) {
+    return onColor;
+  }
+  if(!isOn && !wasOn) {
+    return offColor;
+  }
+  return isOn ? 
+    fadeIn(step): 
+    fadeOut(step);
+}
+
+void updateLight(int lightIdx, CRGB color) {
+  for (int ledIdx = 0; ledIdx < LEDS_PER_LIGHT; ledIdx++) {
+    leds[lights[lightIdx][ledIdx]] = color;
+  }
+}
+
+bool lightIsOn(int lightIdx) {
+  return ((currentState >> lightIdx) & 1) == 1;    
+}
+
+bool lightWasOn(int lightIdx) {
+  return ((lastState >> lightIdx) & 1) == 1;    
+}
+
+CRGB fadeIn(int step) {
+  return blend(offColor, onColor, (double)255/ANIMATION_STEPS * step); 
+}
+
+CRGB fadeOut(int step) {
+  return blend(onColor, offColor, (double)255/ANIMATION_STEPS * step); 
 }
