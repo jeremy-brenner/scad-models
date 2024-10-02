@@ -31,7 +31,6 @@ long lastState = 0;
 
 void setup() { 
   Serial.begin(9600);
-  randomSeed(analogRead(0));
   FastLED.addLeds<WS2812, DATA_PIN, GRB>(leds, NUM_LEDS); 
 }
 
