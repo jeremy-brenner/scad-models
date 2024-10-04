@@ -27,8 +27,8 @@ CRGB onColor = CRGB::LimeGreen;
 CRGB offColor = CRGB::Black;
 CRGB redColor = CRGB::Red;
 
-long currentState = 0;
-long lastState = 0;
+int currentState = 0;
+int lastState = 0;
 
 void setup() { 
   Serial.begin(9600);
@@ -47,7 +47,7 @@ void loop() {
     FastLED.show(); 
     delay(ANIMATION_TIME/ANIMATION_STEPS);
   }
-  long sleepTime = ESP8266TrueRandom.random(SLEEP_MAX_TIME);
+  int sleepTime = ESP8266TrueRandom.random(SLEEP_MAX_TIME);
   delay(sleepTime);
 }
 
